@@ -8,6 +8,38 @@ const getUser = async (data) => {
 
   return currentUser;
 };
+
+const verifyUser = async (data) => {
+  try {
+    if (!(await getUser({ userName: data.userName })))
+      return {
+        error: true,
+        message: 'User not found',
+      };
+    const currentUser = await getUser({
+      userName: data.userName,
+      password: md5(data.password),
+    });
+
+    if (currentUser) {
+      return {
+        id: currentUser.id,
+        userName: currentUser._doc.userName,
+        email: currentUser._doc.email,
+        firstName: currentUser._doc.firstName,
+        lastName: currentUser._doc.lastName,
+      };
+    }
+
+    return {
+      error: true,
+      message: 'Password is not correct',
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 const createNewUser = async (data) => {
   try {
     if (await getUser({ email: data.email }))
@@ -29,13 +61,13 @@ const createNewUser = async (data) => {
     await newUser.save();
 
     return {
-      userName: data.userName,
-      email: data.email,
-      firstName: data.firstName,
-      lastName: data.lastName,
+      id: newUser.id,
+      userName: newUser._doc.userName,
+      email: newUser._doc.email,
+      firstName: newUser._doc.firstName,
+      lastName: newUser._doc.lastName,
     };
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
@@ -43,4 +75,5 @@ const createNewUser = async (data) => {
 module.exports = {
   getUser,
   createNewUser,
+  verifyUser,
 };
