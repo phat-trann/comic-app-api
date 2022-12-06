@@ -43,7 +43,7 @@ router.post('/signup', async (req, res) => {
       lastName,
       email,
       password,
-      age,
+      dob,
       gender,
     });
 
