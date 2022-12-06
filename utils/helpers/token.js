@@ -41,12 +41,10 @@ const validateTokenMiddleware = (req, res, next) => {
     if (validToken) {
       return next();
     } else {
-      return res
-        .status(400)
-        .json({ error: true, message: 'User not Authenticated!' });
+      return res.json({ error: true, message: 'User not Authenticated!' });
     }
   } catch (error) {
-    return res.status(400).json({ error: true, message: error.message });
+    return res.json({ error: true, message: error.message });
   }
 };
 

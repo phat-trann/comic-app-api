@@ -24,11 +24,11 @@ router.post('/refreshToken', (req, res) => {
       userName: tokenData.userName,
     };
     generateTokenToCookie(res, user);
-    res.status(200).json({
+    res.json({
       error: false,
     });
   } else {
-    res.status(404).send({
+    res.json({
       error: true,
       message: 'Invalid request',
     });
