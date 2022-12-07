@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const profileRouter = require('./profile');
 
-const { verifyUser, createNewUser } = require('../utils/database/users');
-const { generateTokens } = require('../utils/helpers/token');
+const { verifyUser, createNewUser } = require('../../utils/database/users');
+const { generateTokens } = require('../../utils/helpers/token');
 
 router.get('/', (req, res) => {
   res.send('respond with a resource');
@@ -63,5 +64,7 @@ router.post('/signup', async (req, res) => {
     });
   }
 });
+
+router.use('/profile', profileRouter);
 
 module.exports = router;

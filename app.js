@@ -5,7 +5,7 @@ const logger = require('morgan');
 require('dotenv').config();
 const { connectDB } = require('./utils/database/connect');
 
-const indexRouter = require('./routes/index');
+const indexRouter = require('./routes');
 const usersRouter = require('./routes/users');
 const adminRouter = require('./routes/admin');
 

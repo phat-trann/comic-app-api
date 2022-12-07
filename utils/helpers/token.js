@@ -16,7 +16,7 @@ const validateToken = (accessToken, secret) => {
 
 const generateTokenToCookie = (res, user) => {
   res.cookie('access-token', createToken(user, _CONF.SECRET, _CONF.tokenLife), {
-    maxAge: _CONF.tokenLife,
+    maxAge: _CONF.tokenLife * 1000,
     httpOnly: true,
   });
 };
