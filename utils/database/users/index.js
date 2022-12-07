@@ -57,6 +57,7 @@ const createNewUser = async (data) => {
       ...data,
       password: md5(data.password),
       level: 0,
+      follows: [],
     });
     await newUser.save();
 

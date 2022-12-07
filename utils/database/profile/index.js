@@ -15,6 +15,7 @@ const getUserProfile = async (data) => {
       dob: currentUser._doc.dob,
       gender: currentUser._doc.gender,
       avatar: currentUser._doc.avatar,
+      level: currentUser._doc.level,
     };
   }
 
@@ -44,6 +45,7 @@ const updateUserProfile = async (userData) => {
         dob: currentUser._doc.dob,
         gender: currentUser._doc.gender,
         avatar: currentUser._doc.avatar,
+        level: currentUser._doc.level,
       };
     }
   } catch (error) {

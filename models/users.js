@@ -33,6 +33,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  follows: Array,
   admin: {
     type: Boolean,
     required: true,
