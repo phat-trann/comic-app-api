@@ -39,6 +39,9 @@ const validateTokenMiddleware = (req, res, next) => {
   try {
     const validToken = validateToken(accessToken, _CONF.SECRET);
     if (validToken) {
+      req.id = validToken.id;
+      req.userName = validToken.userName;
+
       return next();
     } else {
       return res.json({ error: true, message: 'User not Authenticated!' });
@@ -48,9 +51,15 @@ const validateTokenMiddleware = (req, res, next) => {
   }
 };
 
+const removeToken = (res) => {
+  res.clearCookie('access-token');
+  res.end();
+};
+
 module.exports = {
   generateTokens,
   validateToken,
   validateTokenMiddleware,
   generateTokenToCookie,
+  removeToken,
 };

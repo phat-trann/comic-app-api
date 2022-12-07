@@ -3,7 +3,7 @@ const router = express.Router();
 const profileRouter = require('./profile');
 
 const { verifyUser, createNewUser } = require('../../utils/database/users');
-const { generateTokens } = require('../../utils/helpers/token');
+const { generateTokens, removeToken } = require('../../utils/helpers/token');
 
 router.get('/', (req, res) => {
   res.send('respond with a resource');
@@ -63,6 +63,14 @@ router.post('/signup', async (req, res) => {
       message: error?.message || 'Something wrong!',
     });
   }
+});
+
+router.get('/logout', (req, res) => {
+  removeToken(res);
+
+  return {
+    error: false,
+  };
 });
 
 router.use('/profile', profileRouter);
