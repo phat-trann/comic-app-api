@@ -8,6 +8,7 @@ const { connectDB } = require('./utils/database/connect');
 const indexRouter = require('./routes');
 const usersRouter = require('./routes/users');
 const adminRouter = require('./routes/admin');
+const comicRouter = require('./routes/comic');
 
 const app = express();
 
@@ -22,5 +23,6 @@ connectDB();
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
+app.use('/comic', comicRouter);
 
 module.exports = app;

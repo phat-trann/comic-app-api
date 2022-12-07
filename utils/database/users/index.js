@@ -73,8 +73,15 @@ const createNewUser = async (data) => {
   }
 };
 
+const isAdmin = async (data) => {
+  const currentUser = await getUser(data);
+
+  return currentUser?._doc?.admin;
+};
+
 module.exports = {
   getUser,
   createNewUser,
   verifyUser,
+  isAdmin,
 };

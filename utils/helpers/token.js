@@ -1,5 +1,6 @@
 const { sign, verify } = require('jsonwebtoken');
 const _CONF = require('../config');
+const { isAdmin } = require('../database/users');
 
 const createToken = (user, secret, expiresIn) =>
   sign({ userName: user.userName, id: user.id }, secret, {
@@ -51,6 +52,16 @@ const validateTokenMiddleware = (req, res, next) => {
   }
 };
 
+const validateAdminMiddleware = async (req, res, next) => {
+  const { id, userName } = req;
+
+  if (await isAdmin({ id, userName })) return next();
+  return res.json({
+    error: true,
+    message: "Current user don't have permission to do this action(s)",
+  });
+};
+
 const removeToken = (res) => {
   res.clearCookie('access-token');
   res.end();
@@ -60,6 +71,7 @@ module.exports = {
   generateTokens,
   validateToken,
   validateTokenMiddleware,
+  validateAdminMiddleware,
   generateTokenToCookie,
   removeToken,
 };
