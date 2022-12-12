@@ -10,8 +10,13 @@ const comicSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  anotherName: String,
-  author: [String],
+  anotherName: [String],
+  artists: [String],
+  authors: [String],
+  avatar: {
+    type: String,
+    required: true,
+  },
   description: String,
   isDone: {
     type: Boolean,
@@ -26,38 +31,8 @@ const comicSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  rating: {
-    1: {
-      type: Number,
-      default: 0,
-    },
-    2: {
-      type: Number,
-      default: 0,
-    },
-    3: {
-      type: Number,
-      default: 0,
-    },
-    4: {
-      type: Number,
-      default: 0,
-    },
-    5: {
-      type: Number,
-      default: 0,
-    },
-    avg: {
-      type: Number,
-      default: 0,
-    },
-  },
   chapters: [
     {
-      number: {
-        type: Number,
-        required: true,
-      },
       name: String,
       updateDate: {
         type: Date,
@@ -69,32 +44,9 @@ const comicSchema = new mongoose.Schema({
         default: 0,
       },
       images: {
-        type: String,
+        type: [String],
         required: true,
       },
-      /* TODO: Handle comments */
-      // comments: [
-      //   {
-      //     user: {
-      //       name: {
-      //         type: String,
-      //         required: true,
-      //       },
-      //       level: {
-      //         type: Number,
-      //         required: true,
-      //       },
-      //       id: {
-      //         type: String,
-      //         required: true,
-      //       },
-      //       avatar: {
-      //         type: String,
-      //         required: true,
-      //       },
-      //     },
-      //   },
-      // ],
     },
   ],
 });

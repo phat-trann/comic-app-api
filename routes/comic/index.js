@@ -1,4 +1,5 @@
 const express = require('express');
+const { createNewComic } = require('../../utils/database/comic');
 const {
   validateTokenMiddleware,
   validateAdminMiddleware,
@@ -10,6 +11,17 @@ router.get(
   validateTokenMiddleware,
   validateAdminMiddleware,
   (req, res) => {
+    res.send('Hi');
+  }
+);
+
+router.post(
+  '/add',
+  validateTokenMiddleware,
+  validateAdminMiddleware,
+  (req, res) => {
+    const data = req.body;
+    createNewComic(data);
     res.send('Hi');
   }
 );
