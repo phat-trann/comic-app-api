@@ -1,19 +1,46 @@
 const express = require('express');
-const { createNewComic } = require('../../utils/database/comic');
+const {
+  createNewComic,
+  getComic,
+  getChapter,
+} = require('../../utils/database/comic');
 const {
   validateTokenMiddleware,
   validateAdminMiddleware,
 } = require('../../utils/helpers/token');
 const router = express.Router();
 
-router.get(
-  '/',
-  validateTokenMiddleware,
-  validateAdminMiddleware,
-  (req, res) => {
-    res.send('Hi');
-  }
-);
+router.get('/:hashName', async (req, res) => {
+  const hashName = req.params.hashName;
+  const currentComic = await getComic(hashName);
+
+  if (!currentComic)
+    return res.status(404).json({
+      error: true,
+      message: 'Not found',
+    });
+
+  return res.json({
+    error: false,
+    ...currentComic?._doc,
+  });
+});
+
+router.get('/:hashName/:chapter', async (req, res) => {
+  const { hashName, chapter } = req.params;
+  const currentChapter = await getChapter(hashName, chapter);
+
+  if (!currentChapter)
+    return res.status(404).json({
+      error: true,
+      message: 'Not found',
+    });
+
+  return res.json({
+    error: false,
+    ...currentChapter?._doc,
+  });
+});
 
 router.post(
   '/add',
@@ -21,7 +48,7 @@ router.post(
   validateAdminMiddleware,
   (req, res) => {
     const data = req.body;
-    createNewComic(data);
+    // createNewComic(data);
     res.send('Hi');
   }
 );

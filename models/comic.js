@@ -43,10 +43,7 @@ const comicSchema = new mongoose.Schema({
         required: true,
         default: 0,
       },
-      images: {
-        type: [String],
-        required: true,
-      },
+      hashName: String,
     },
   ],
 });

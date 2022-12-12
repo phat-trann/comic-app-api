@@ -1,4 +1,17 @@
 const comic = require('../../../models/comic');
+const chapter = require('../../../models/chapter');
+
+const getComic = async (comicHashName) => {
+  return await comic.findOne({
+    hashName: comicHashName,
+  });
+};
+
+const getChapter = async (comicHashName, chapterId) => {
+  return await chapter.findOne({
+    hashName: [comicHashName, chapterId].join('-'),
+  });
+};
 
 const createNewComic = async (currentData) => {
   try {
@@ -15,4 +28,6 @@ const createNewComic = async (currentData) => {
 
 module.exports = {
   createNewComic,
+  getComic,
+  getChapter,
 };
