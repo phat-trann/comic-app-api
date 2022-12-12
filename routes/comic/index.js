@@ -3,12 +3,32 @@ const {
   createNewComic,
   getComic,
   getChapter,
+  getComics,
 } = require('../../utils/database/comic');
 const {
   validateTokenMiddleware,
   validateAdminMiddleware,
 } = require('../../utils/helpers/token');
 const router = express.Router();
+
+router.get('/search', async (req, res) => {
+  const searchData = req.query;
+  const comics = await getComics(searchData);
+
+  console.log(comics);
+
+  if (!comics?.length) {
+    return res.status(404).json({
+      error: true,
+      message: 'Not found',
+    });
+  }
+
+  return res.json({
+    error: false,
+    data: comics,
+  });
+});
 
 router.get('/:hashName', async (req, res) => {
   const hashName = req.params.hashName;

@@ -7,6 +7,10 @@ const getComic = async (comicHashName) => {
   });
 };
 
+const getComics = async (searchData) => {
+  return await comic.find({ ...searchData }).limit(20);
+};
+
 const getChapter = async (comicHashName, chapterId) => {
   return await chapter.findOne({
     hashName: [comicHashName, chapterId].join('-'),
@@ -30,4 +34,5 @@ module.exports = {
   createNewComic,
   getComic,
   getChapter,
+  getComics,
 };
