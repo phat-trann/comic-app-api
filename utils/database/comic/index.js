@@ -8,12 +8,13 @@ const getComic = async (comicHashName) => {
 };
 
 const getComics = async (searchData) => {
-  return await comic.find({ ...searchData }).limit(20);
+  const { limit } = searchData;
+  return await comic.find({ ...searchData }).limit(limit);
 };
 
 const getChapter = async (comicHashName, chapterId) => {
   return await chapter.findOne({
-    hashName: [comicHashName, chapterId].join('-'),
+    hashName: [comicHashName, chapterId].join('/'),
   });
 };
 
