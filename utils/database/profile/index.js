@@ -24,7 +24,6 @@ const getUserProfile = async (data) => {
 
 const updateUserProfile = async (userData) => {
   const { id, userName, ...data } = userData;
-  console.log(data);
   const currentUser = await getUser({ id, userName });
 
   try {

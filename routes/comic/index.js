@@ -15,8 +15,6 @@ router.get('/search', async (req, res) => {
   const searchData = req.query;
   const comics = await getComics(searchData);
 
-  console.log(comics);
-
   if (!comics?.length) {
     return res.status(404).json({
       error: true,

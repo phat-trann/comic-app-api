@@ -7,9 +7,12 @@ const getComic = async (comicHashName) => {
   });
 };
 
-const getComics = async (searchData) => {
-  const { limit } = searchData;
-  return await comic.find({ ...searchData }).limit(limit);
+const getComics = async (data) => {
+  const { limit, sort, sortType, ...searchData } = data;
+  return await comic
+    .find({ ...searchData })
+    .limit(limit)
+    .sort([[sort, sortType]]);
 };
 
 const getChapter = async (comicHashName, chapterId) => {
