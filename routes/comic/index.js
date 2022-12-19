@@ -40,7 +40,7 @@ router.get('/:hashName', async (req, res) => {
 
   return res.json({
     error: false,
-    ...currentComic?._doc,
+    data: currentComic?._doc,
   });
 });
 
@@ -56,7 +56,7 @@ router.get('/:hashName/:chapter', async (req, res) => {
 
   return res.json({
     error: false,
-    ...currentChapter?._doc,
+    data: currentChapter?._doc,
   });
 });
 
