@@ -7,6 +7,10 @@ const getComic = async (comicHashName) => {
   });
 };
 
+const getComicsCount = async () => {
+  return await comic.countDocuments();
+};
+
 const getComics = async (data) => {
   const { skip, limit, sort, sortType, ...searchData } = data;
   return await comic
@@ -40,4 +44,5 @@ module.exports = {
   getComic,
   getChapter,
   getComics,
+  getComicsCount,
 };
