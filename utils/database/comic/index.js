@@ -8,9 +8,10 @@ const getComic = async (comicHashName) => {
 };
 
 const getComics = async (data) => {
-  const { limit, sort, sortType, ...searchData } = data;
+  const { skip, limit, sort, sortType, ...searchData } = data;
   return await comic
     .find({ ...searchData })
+    .skip(skip)
     .limit(limit)
     .sort([[sort, sortType]]);
 };
