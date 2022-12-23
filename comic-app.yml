@@ -860,36 +860,14 @@ paths:
                     type: boolean
                   data:
                     $ref: '#/components/schemas/user_profile'
-    delete:
-      security:
-        - normalUser: []
-      tags:
-        - users
-      summary: User delete their account
-      parameters:
-        - in: query
-          name: id
-          description: current user id
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
   /users/delete:
     delete:
       security:
+        - normalUser: []
         - admin: []
       tags:
         - users
-      summary: Admin remove user account
+      summary: Remove user by id
       parameters:
         - in: query
           name: id
@@ -908,12 +886,36 @@ paths:
                   error:
                     type: boolean
 
+  /comment:
+    get:
+      tags:
+        - comment
+      summary: Get comment by id
+      parameters:
+        - in: query
+          name: id
+          description: comment id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/comment'
     post:
       security:
         - normalUser: []
       tags:
-        - users
-      summary: User click follow a comic
+        - comment
+      summary: Add comic
       requestBody:
         required: true
         content:
@@ -921,11 +923,16 @@ paths:
             schema:
               type: object
               properties:
-                comic:
-                  description: Comic id
+                comicId:
+                  description: comic id
                   type: string
-                user:
-                  description: User id
+                chapterId:
+                  description: chapter id
+                  type: string
+                replyId:
+                  description: Empty if it not is a reply
+                  type: string
+                message:
                   type: string
       responses:
         200:
@@ -938,23 +945,18 @@ paths:
                   error:
                     type: boolean
                   data:
-                    $ref: '#/components/schemas/comic'
+                    $ref: '#/components/schemas/comment'
     delete:
       security:
         - normalUser: []
+        - admin: []
       tags:
-        - users
-      summary: User click un-follow the comic
+        - comment
+      summary: Remove comment by id
       parameters:
         - in: query
-          name: comicId
-          description: Comic id
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: userId
-          description: User id
+          name: id
+          description: comment by id
           required: true
           schema:
             type: string
@@ -968,6 +970,315 @@ paths:
                 properties:
                   error:
                     type: boolean
+  /comment/newest:
+    get:
+      tags:
+        - comment
+      summary: Get newest comments
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/comment'
+  /comment/like:
+    post:
+      tags:
+        - comment
+      summary: Like a comment
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                commentId:
+                  type: string
+                userId:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/comment'
+    delete:
+      tags:
+        - comment
+      summary: Remove like a comment
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                commentId:
+                  type: string
+                userId:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/comment'
+  /comment/dislike:
+    post:
+      tags:
+        - comment
+      summary: Dislike a comment
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                commentId:
+                  type: string
+                userId:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/comment'
+    delete:
+      tags:
+        - comment
+      summary: Remove dislike a comment
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                commentId:
+                  type: string
+                userId:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/comment'
+
+  /category/add:
+    post:
+      security:
+        - admin: []
+      tags:
+        - category
+      summary: Add new category
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/category'
+  /category/assign:
+    post:
+      security:
+        - admin: []
+      tags:
+        - category
+      summary: Assign comic to a category
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                comicId:
+                  type: string
+                categoryId:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/category'
+    delete:
+      security:
+        - admin: []
+      tags:
+        - category
+      summary: Unassign comic to a category
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                comicId:
+                  type: string
+                categoryId:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/category'
+
+  /report:
+    post:
+      security:
+        - normalUser: []
+      tags:
+        - report
+      summary: User add report to admin
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                message:
+                  type: string
+                userId:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/report'
+    delete:
+      security:
+        - admin: []
+      tags:
+        - report
+      summary: Admin remove report
+      parameters:
+        - in: query
+          name: id
+          description: report id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+  /report/resolve:
+    post:
+      security:
+        - admin: []
+      tags:
+        - report
+      summary: Admin confirm this problem are resolved
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                reportId:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  data:
+                    $ref: '#/components/schemas/report'
 
 components:
   schemas:
@@ -1074,6 +1385,58 @@ components:
           type: boolean
         level:
           type: number
+    comment:
+      type: object
+      properties:
+        _id:
+          type: string
+        comicId:
+          type: string
+        message:
+          type: string
+        replies:
+          type: array
+          description: List replied id
+          items:
+            type: string
+        vote:
+          type: object
+          properties:
+            like:
+              type: array
+              items:
+                type: string
+            dislike:
+              type: array
+              items:
+                type: string
+    category:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        assign:
+          type: array
+          items:
+            type: string
+    report:
+      type: object
+      properties:
+        _id:
+          type: string
+        type:
+          type: string
+        userId:
+          type: string
+        message:
+          type: string
+        createData:
+          type: number
+        resolved:
+          type: boolean
+
   securitySchemes:
     normalUser:
       type: apiKey
