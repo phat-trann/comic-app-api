@@ -29,6 +29,23 @@ router.get('/search', async (req, res) => {
   });
 });
 
+router.get('/searchByName', async (req, res) => {
+  const searchData = req.query;
+  const comics = await getComics(searchData);
+
+  if (!comics?.length) {
+    return res.status(404).json({
+      error: true,
+      message: 'Not found',
+    });
+  }
+
+  return res.json({
+    error: false,
+    data: comics,
+  });
+});
+
 router.get('/count', async (req, res) => {
   const count = await getComicsCount();
 

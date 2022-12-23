@@ -12,12 +12,46 @@ const getComicsCount = async () => {
 };
 
 const getComics = async (data) => {
-  const { skip, limit, sort, sortType, ...searchData } = data;
+  const { skip, limit, sort, sortType, categoryIn, categoryEx, ...searchData } =
+    data;
+
+  if (searchData?.chaptersLength) {
+    searchData.chaptersLength = { $gte: searchData.chaptersLength };
+  }
+
+  if (categoryIn) {
+    searchData.category = {
+      $all: categoryIn.split(','),
+    };
+  }
+
+  if (categoryEx) {
+    searchData.category = {
+      ...searchData.category,
+      $nin: categoryEx.split(','),
+    };
+  }
+
   return await comic
     .find({ ...searchData })
     .skip(skip)
     .limit(limit)
     .sort([[sort, sortType]]);
+};
+
+const getComicsByName = async (data) => {
+  const { limit, name } = data;
+  const search = {
+    $or: [
+      {
+        name: new RegExp(name, 'i'),
+      },
+      {
+        anotherName: new RegExp(name, 'i'),
+      },
+    ],
+  };
+  return await comic.find({ ...search }).limit(limit);
 };
 
 const getChapter = async (comicHashName, chapterId) => {
@@ -44,5 +78,6 @@ module.exports = {
   getComic,
   getChapter,
   getComics,
+  getComicsByName,
   getComicsCount,
 };
