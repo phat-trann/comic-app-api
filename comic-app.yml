@@ -214,7 +214,7 @@ paths:
         - normalUser: []
       tags:
         - comic
-      summary: User click like the comic
+      summary: User click like/dislike the comic
       requestBody:
         required: true
         content:
@@ -237,35 +237,12 @@ paths:
                   error:
                     type: boolean
                   data:
-                    type: number
-                    description: Current likes
-    delete:
-      security:
-        - normalUser: []
-      tags:
-        - comic
-      summary: User click dislike the comic
-      parameters:
-        - in: query
-          name: hashName
-          description: Comic hash name
-          required: true
-          example: a-falling-cohabitation
-          schema:
-            type: string
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-                  data:
-                    type: number
-                    description: Current likes
+                    type: object
+                    properties:
+                      likesCount:
+                        type: number
+                      isLike:
+                        type: boolean
   /comic/vote:
     post:
       security:

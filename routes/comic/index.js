@@ -8,7 +8,7 @@ const {
   getComicsCount,
   getFullComicsCount,
   getComicsByName,
-  comicInDeLike,
+  comicToggleLike,
 } = require('../../utils/database/comic');
 const { getUser, userToggleLikeComic } = require('../../utils/database/users');
 const {
@@ -92,43 +92,18 @@ router.post('/like', validateTokenMiddleware, async (req, res) => {
   const currentUser = await getUser({ userName: req?.userName });
   const currentComic = await getComic(comicHashName);
 
-  if (
-    currentUser &&
-    currentComic &&
-    currentUser._doc.likes.indexOf(comicHashName) === -1
-  ) {
-    await userToggleLikeComic(currentUser, comicHashName, true);
+  if (currentUser && currentComic) {
+    const isLike = currentUser._doc.likes.indexOf(comicHashName) === -1;
+    await userToggleLikeComic(currentUser, comicHashName, isLike);
 
-    const likesCount = await comicInDeLike(currentComic, 1);
+    const likesCount = await comicToggleLike(currentComic, isLike ? 1 : -1);
 
     return res.json({
       error: false,
-      data: likesCount,
-    });
-  }
-
-  return res.status(400).json({
-    error: true,
-  });
-});
-
-router.delete('/like', validateTokenMiddleware, async (req, res) => {
-  const comicHashName = req.query?.hashName;
-  const currentUser = await getUser({ userName: req?.userName });
-  const currentComic = await getComic(comicHashName);
-
-  if (
-    currentUser &&
-    currentComic &&
-    currentUser._doc.likes.indexOf(comicHashName) !== -1
-  ) {
-    await userToggleLikeComic(currentUser, comicHashName, false);
-
-    const likesCount = await comicInDeLike(currentComic, -1);
-
-    return res.json({
-      error: false,
-      data: likesCount,
+      data: {
+        likesCount,
+        isLike,
+      },
     });
   }
 
