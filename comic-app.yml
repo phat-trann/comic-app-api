@@ -29,12 +29,14 @@ paths:
       - in: query
         name: categoryId
         description: category id
+        example: action
         required: false
         schema:
           type: string
       - in: query
         name: chaptersLength
         description: Limit chapter length (greater than)
+        example: 50
         required: false
         schema:
           type: number
@@ -55,6 +57,7 @@ paths:
       - in: query
         name: isDone
         description: The comics is done or not
+        example: false
         required: false
         schema:
           type: boolean
@@ -124,14 +127,14 @@ paths:
           required: false
           schema:
             type: string
-            example: 'Comedy,Romance'
+            example: 'comedy,romance'
         - in: query
           name: categoryEx
           description: The results must be not assigned to any category in these categories (comma separated)
           required: false
           schema:
             type: string
-            example: 'Award Winning,Action'
+            example: 'award-winning,action'
         - in: query
           name: isDone
           description: The comics is done or not
