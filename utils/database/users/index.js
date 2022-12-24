@@ -79,9 +79,11 @@ const isAdmin = async (data) => {
   return currentUser?._doc?.admin;
 };
 
-const userLikeComic = async (user, hashName) => {
+const userToggleLikeComic = async (user, hashName, isLike) => {
   try {
-    user.likes = [...user._doc.likes, hashName];
+    if (isLike) user.likes = [...user._doc.likes, hashName];
+    else user.likes = user._doc.likes.filter((liked) => liked !== hashName);
+
     await user.save();
 
     return true;
@@ -96,5 +98,5 @@ module.exports = {
   createNewUser,
   verifyUser,
   isAdmin,
-  userLikeComic,
+  userToggleLikeComic,
 };

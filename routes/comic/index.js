@@ -8,9 +8,9 @@ const {
   getComicsCount,
   getFullComicsCount,
   getComicsByName,
-  comicIncreaseLike
+  comicInDeLike,
 } = require('../../utils/database/comic');
-const { getUser, userLikeComic } = require('../../utils/database/users');
+const { getUser, userToggleLikeComic } = require('../../utils/database/users');
 const {
   validateTokenMiddleware,
   validateAdminMiddleware,
@@ -97,9 +97,34 @@ router.post('/like', validateTokenMiddleware, async (req, res) => {
     currentComic &&
     currentUser._doc.likes.indexOf(comicHashName) === -1
   ) {
-    await userLikeComic(currentUser, comicHashName);
+    await userToggleLikeComic(currentUser, comicHashName, true);
 
-    const likesCount = await comicIncreaseLike(currentComic);
+    const likesCount = await comicInDeLike(currentComic, 1);
+
+    return res.json({
+      error: false,
+      data: likesCount,
+    });
+  }
+
+  return res.status(400).json({
+    error: true,
+  });
+});
+
+router.delete('/like', validateTokenMiddleware, async (req, res) => {
+  const comicHashName = req.query?.hashName;
+  const currentUser = await getUser({ userName: req?.userName });
+  const currentComic = await getComic(comicHashName);
+
+  if (
+    currentUser &&
+    currentComic &&
+    currentUser._doc.likes.indexOf(comicHashName) !== -1
+  ) {
+    await userToggleLikeComic(currentUser, comicHashName, false);
+
+    const likesCount = await comicInDeLike(currentComic, -1);
 
     return res.json({
       error: false,
