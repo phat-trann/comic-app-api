@@ -35,22 +35,30 @@ const getComicsCount = async (data) => {
 };
 
 const getComics = async (data) => {
-  const { skip, limit, sort, sortType, categoryIn, categoryEx, ...searchData } =
-    data;
+  const {
+    skip,
+    limit,
+    sort,
+    sortType,
+    categoryIn,
+    categoryEx,
+    chaptersLength,
+    ...searchData
+  } = data;
 
-  if (searchData?.chaptersLength) {
-    searchData.chaptersLength = { $gte: searchData.chaptersLength };
+  if (chaptersLength) {
+    searchData.chaptersLength = { $gte: chaptersLength };
   }
 
   if (categoryIn) {
-    searchData.category = {
+    searchData['category.key'] = {
       $all: categoryIn.split(','),
     };
   }
 
   if (categoryEx) {
-    searchData.category = {
-      ...searchData.category,
+    searchData['category.key'] = {
+      ...searchData['category.key'],
       $nin: categoryEx.split(','),
     };
   }
