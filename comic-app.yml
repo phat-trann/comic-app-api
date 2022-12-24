@@ -83,64 +83,59 @@ paths:
           name: limit
           required:  true
           description: Limit comics count in result
+          example: 10
           schema:
             type: number
         - in: query
           name: skip
           description: Number of items will be skipped before get results
           required: false
+          example: 10
           schema:
             type: number
         - in: query
           name: sort
-          description: The results will be sorted by (default by name)
+          description: The results will be sorted by (lastUpload, views, followers, chaptersLength, name)
           required: false
+          example: name
           schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - lastUpload
-                - views
-                - followers
-                - chaptersLength
+            type: string
         - in: query
           name: sortType
-          description: The results are sorted ascending (asc) or descending (desc) - default asc
+          description: The results are sorted ascending (asc) or descending (desc)
           required: false
+          example: asc
           schema:
-            type: array
-            items:
-              type: string
-              enum:
-                - desc
-                - asc
+            type: string
         - in: query
           name: chaptersLength
           description: Limit chapter length (greater than)
           required: false
+          example: 50
           schema:
             type: number
         - in: query
           name: categoryIn
           description: The results must be assigned to these categories (comma separated)
           required: false
+          example: 'comedy,romance'
           schema:
             type: string
-            example: 'comedy,romance'
         - in: query
           name: categoryEx
           description: The results must be not assigned to any category in these categories (comma separated)
           required: false
+          example: 'award-winning,action'
           schema:
             type: string
-            example: 'award-winning,action'
         - in: query
           name: isDone
           description: The comics is done or not
           required: false
+          example: false
           schema:
             type: boolean
+            default: false
       responses:
         200:
           description: Successful operation
@@ -165,12 +160,14 @@ paths:
           name: limit
           required:  true
           description: Limit comics count in result
+          example: 10
           schema:
             type: number
         - in: query
           name: name
           description: Name or another name of comics
           required: true
+          example: gun
           schema:
             type: string
       responses:
@@ -187,7 +184,7 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/comic'
-  /comic/{id}:
+  /comic/get/{id}:
     get:
       tags:
         - comic
@@ -450,7 +447,7 @@ paths:
                   error:
                     type: boolean
 
-  /chapters/{id}/{chap_id}:
+  /chapters/get/{id}/{chap_id}:
     get:
       tags:
         - chapters
@@ -1373,7 +1370,9 @@ components:
         chaptersLength:
           type: number
         lastUpload:
-          type: number
+          oneOf:
+            - type: string
+            - type: number
       xml:
         name: comic
     chapter:
@@ -1386,7 +1385,9 @@ components:
         name:
           type: string
         updateDate:
-          type: number
+          oneOf:
+            - type: string
+            - type: number
         views:
           type: number
     chapter_detail:
