@@ -194,6 +194,7 @@ paths:
           name: hashName
           description: comic hashName
           required: true
+          example: lookism
           schema:
             type: string
       responses:
