@@ -15,6 +15,25 @@ const {
 } = require('../../utils/helpers/token');
 const router = express.Router();
 
+router.get('/count', async (req, res) => {
+  const { categoryId, ...queryData } = req.query;
+  let count;
+
+  if (categoryId) count = await getComicsInCategoryCount(categoryId);
+  else if (Object.keys(queryData).length > 0) count = await getComicsCount(queryData);
+  else count = await getFullComicsCount();
+
+  if (typeof count !== 'number')
+    return res.json({
+      error: true,
+    });
+
+  return res.json({
+    error: false,
+    data: count,
+  });
+});
+
 router.get('/search', async (req, res) => {
   const searchData = req.query;
   const comics = await getComics(searchData);
@@ -46,25 +65,6 @@ router.get('/searchByName', async (req, res) => {
   return res.json({
     error: false,
     data: comics,
-  });
-});
-
-router.get('/count', async (req, res) => {
-  const { categoryId, ...queryData } = req.query;
-  let count;
-
-  if (categoryId) count = await getComicsInCategoryCount(categoryId);
-  else if (Object.keys(queryData).length > 0) count = await getComicsCount(queryData);
-  else count = await getFullComicsCount();
-
-  if (typeof count !== 'number')
-    return res.json({
-      error: true,
-    });
-
-  return res.json({
-    error: false,
-    data: count,
   });
 });
 
