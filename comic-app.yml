@@ -915,7 +915,7 @@ paths:
         - normalUser: []
       tags:
         - comment
-      summary: Add comic
+      summary: Add comment
       requestBody:
         required: true
         content:
