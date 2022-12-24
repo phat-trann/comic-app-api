@@ -1312,8 +1312,15 @@ components:
         category:
           type: array
           items:
-            type: string
+            type: object
+            properties:
+              key:
+                type: string
+              name:
+                type: string
         views:
+          type: number
+        likes:
           type: number
         followers:
           type: number
@@ -1348,6 +1355,10 @@ components:
       type: object
       properties:
         images:
+          type: array
+          items:
+            type: string
+        comments:
           type: array
           items:
             type: string
@@ -1414,6 +1425,8 @@ components:
       type: object
       properties:
         _id:
+          type: string
+        key:
           type: string
         name:
           type: string

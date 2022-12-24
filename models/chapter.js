@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 const comicSchema = new mongoose.Schema({
-  hashName: {
-    type: String,
-    unique: true,
-    required: true,
-  },
   name: String,
   updateDate: {
     type: Date,
@@ -20,6 +15,12 @@ const comicSchema = new mongoose.Schema({
     type: [String],
     required: true,
   },
+  hashName: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  comments: [String]
 });
 
 module.exports = mongoose.model('chapter', comicSchema);

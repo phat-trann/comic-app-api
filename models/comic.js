@@ -22,7 +22,12 @@ const comicSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  category: [String],
+  category: [
+    {
+      key: String,
+      name: String,
+    },
+  ],
   views: {
     type: Number,
     default: 0,
@@ -46,6 +51,23 @@ const comicSchema = new mongoose.Schema({
       hashName: String,
     },
   ],
+  likes: {
+    type: Number,
+    default: 0,
+  },
+  voteCount: {
+    type: Number,
+    default: 0,
+  },
+  voteSum: {
+    type: Number,
+    default: 0,
+  },
+  chaptersLength: {
+    type: Number,
+    default: 0,
+  },
+  lastUpload: Date,
 });
 
 module.exports = mongoose.model('comic', comicSchema);
