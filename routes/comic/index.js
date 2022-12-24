@@ -1,4 +1,5 @@
 const express = require('express');
+const { getComicsInCategoryCount } = require('../../utils/database/category');
 const {
   createNewComic,
   getComic,
@@ -47,7 +48,16 @@ router.get('/searchByName', async (req, res) => {
 });
 
 router.get('/count', async (req, res) => {
-  const count = await getComicsCount();
+  const { id } = req.query;
+  let count;
+
+  if (!id) count = await getComicsCount();
+  else count = await getComicsInCategoryCount(id);
+
+  if (typeof count !== 'number')
+    return res.json({
+      error: true,
+    });
 
   return res.json({
     error: false,
