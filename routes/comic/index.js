@@ -7,6 +7,7 @@ const {
   getComics,
   getComicsCount,
   getFullComicsCount,
+  getComicsByName,
 } = require('../../utils/database/comic');
 const {
   validateTokenMiddleware,
@@ -33,7 +34,7 @@ router.get('/search', async (req, res) => {
 
 router.get('/searchByName', async (req, res) => {
   const searchData = req.query;
-  const comics = await getComics(searchData);
+  const comics = await getComicsByName(searchData);
 
   if (!comics?.length) {
     return res.status(404).json({
