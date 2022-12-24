@@ -6,6 +6,7 @@ const {
   getChapter,
   getComics,
   getComicsCount,
+  getFullComicsCount,
 } = require('../../utils/database/comic');
 const {
   validateTokenMiddleware,
@@ -48,11 +49,12 @@ router.get('/searchByName', async (req, res) => {
 });
 
 router.get('/count', async (req, res) => {
-  const { id } = req.query;
+  const { categoryId, ...queryData } = req.query;
   let count;
 
-  if (!id) count = await getComicsCount();
-  else count = await getComicsInCategoryCount(id);
+  if (categoryId) count = await getComicsInCategoryCount(categoryId);
+  else if (Object.keys(queryData).length > 0) count = await getComicsCount(queryData);
+  else count = await getFullComicsCount();
 
   if (typeof count !== 'number')
     return res.json({

@@ -7,8 +7,31 @@ const getComic = async (comicHashName) => {
   });
 };
 
-const getComicsCount = async () => {
+const getFullComicsCount = async () => {
   return await comic.countDocuments();
+};
+
+const getComicsCount = async (data) => {
+  const { categoryIn, categoryEx, chaptersLength, ...searchData } = data;
+
+  if (chaptersLength) {
+    searchData.chaptersLength = { $gte: chaptersLength };
+  }
+
+  if (categoryIn) {
+    searchData['category.key'] = {
+      $all: categoryIn.split(','),
+    };
+  }
+
+  if (categoryEx) {
+    searchData['category.key'] = {
+      ...searchData['category.key'],
+      $nin: categoryEx.split(','),
+    };
+  }
+
+  return await comic.count({ ...searchData });
 };
 
 const getComics = async (data) => {
@@ -79,5 +102,6 @@ module.exports = {
   getChapter,
   getComics,
   getComicsByName,
+  getFullComicsCount,
   getComicsCount,
 };
