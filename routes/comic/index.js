@@ -1,10 +1,12 @@
 const express = require('express');
+const { getComicsInCategoryCount } = require('../../utils/database/category');
 const {
   createNewComic,
   getComic,
   getChapter,
   getComics,
   getComicsCount,
+  getFullComicsCount,
 } = require('../../utils/database/comic');
 const {
   validateTokenMiddleware,
@@ -47,7 +49,17 @@ router.get('/searchByName', async (req, res) => {
 });
 
 router.get('/count', async (req, res) => {
-  const count = await getComicsCount();
+  const { categoryId, ...queryData } = req.query;
+  let count;
+
+  if (categoryId) count = await getComicsInCategoryCount(categoryId);
+  else if (Object.keys(queryData).length > 0) count = await getComicsCount(queryData);
+  else count = await getFullComicsCount();
+
+  if (typeof count !== 'number')
+    return res.json({
+      error: true,
+    });
 
   return res.json({
     error: false,

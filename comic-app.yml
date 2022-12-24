@@ -6,7 +6,7 @@ info:
   contact:
     email: phat.tran.fit@gmail.com
 servers:
-  - url: http://localhost:3000/
+  - url: http://localhost:3000
     description: Sandbox
   - url: https://pm.comicapp.com/api/v1
     description: Expected
@@ -27,11 +27,40 @@ paths:
       summary: Show comics count in database (all or single category)
       parameters:
       - in: query
-        name: id
+        name: categoryId
         description: category id
+        example: action
         required: false
         schema:
           type: string
+      - in: query
+        name: chaptersLength
+        description: Limit chapter length (greater than)
+        example: 50
+        required: false
+        schema:
+          type: number
+      - in: query
+        name: categoryIn
+        description: The results must be assigned to these categories (comma separated)
+        required: false
+        schema:
+          type: string
+          example: 'comedy,romance'
+      - in: query
+        name: categoryEx
+        description: The results must be not assigned to any category in these categories (comma separated)
+        required: false
+        schema:
+          type: string
+          example: 'award-winning,action'
+      - in: query
+        name: isDone
+        description: The comics is done or not
+        example: false
+        required: false
+        schema:
+          type: boolean
       responses:
         200:
           description: Successful operation
@@ -87,19 +116,25 @@ paths:
                 - desc
                 - asc
         - in: query
+          name: chaptersLength
+          description: Limit chapter length (greater than)
+          required: false
+          schema:
+            type: number
+        - in: query
           name: categoryIn
           description: The results must be assigned to these categories (comma separated)
           required: false
           schema:
             type: string
-            example: 'Comedy,Romance'
+            example: 'comedy,romance'
         - in: query
           name: categoryEx
           description: The results must be not assigned to any category in these categories (comma separated)
           required: false
           schema:
             type: string
-            example: 'Award Winning,Action'
+            example: 'award-winning,action'
         - in: query
           name: isDone
           description: The comics is done or not
@@ -1023,17 +1058,18 @@ paths:
       tags:
         - comment
       summary: Remove like a comment
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                commentId:
-                  type: string
-                userId:
-                  type: string
+      parameters:
+      - in: query
+        name: name
+        description: description
+        required: false
+        schema:
+          type: object
+          properties:
+            commentId:
+              type: string
+            userId:
+              type: string
       responses:
         200:
           description: Successful operation
@@ -1082,17 +1118,18 @@ paths:
       tags:
         - comment
       summary: Remove dislike a comment
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                commentId:
-                  type: string
-                userId:
-                  type: string
+      parameters:
+      - in: query
+        name: name
+        description: description
+        required: false
+        schema:
+          type: object
+          properties:
+            commentId:
+              type: string
+            userId:
+              type: string
       responses:
         200:
           description: Successful operation
@@ -1172,17 +1209,18 @@ paths:
       tags:
         - category
       summary: Unassign comic to a category
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                comicId:
-                  type: string
-                categoryId:
-                  type: string
+      parameters:
+      - in: query
+        name: name
+        description: description
+        required: false
+        schema:
+          type: object
+          properties:
+            comicId:
+              type: string
+            categoryId:
+              type: string
       responses:
         200:
           description: Successful operation
