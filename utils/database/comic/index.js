@@ -104,6 +104,15 @@ const createNewComic = async (currentData) => {
   }
 };
 
+const comicIncreaseLike = async (currentComic) => {
+  const newLikes = currentComic._doc.likes + 1;
+
+  currentComic.likes = newLikes;
+  await currentComic.save();
+
+  return newLikes;
+};
+
 module.exports = {
   createNewComic,
   getComic,
@@ -112,4 +121,5 @@ module.exports = {
   getComicsByName,
   getFullComicsCount,
   getComicsCount,
+  comicIncreaseLike,
 };

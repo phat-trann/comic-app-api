@@ -33,7 +33,8 @@ const userSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  follows: Array,
+  follows: [String],
+  likes: [String],
   admin: {
     type: Boolean,
     required: true,

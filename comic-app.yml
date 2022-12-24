@@ -222,12 +222,10 @@ paths:
             schema:
               type: object
               properties:
-                comic:
-                  description: Comic id
+                hashName:
+                  description: Comic hash name
                   type: string
-                user:
-                  description: User id
-                  type: string
+                  example: lookism
       responses:
         200:
           description: Successful operation
@@ -1435,6 +1433,14 @@ components:
           type: boolean
         level:
           type: number
+        follows:
+          type: array
+          items:
+            type: string
+        likes:
+          type: array
+          items:
+            type: string
     comment:
       type: object
       properties:
