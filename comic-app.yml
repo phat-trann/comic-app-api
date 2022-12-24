@@ -184,15 +184,15 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/comic'
-  /comic/get/{id}:
+  /comic/get/{hashName}:
     get:
       tags:
         - comic
-      summary: Get single comic by id
+      summary: Get single comic by hash name
       parameters:
         - in: path
-          name: id
-          description: comic id
+          name: hashName
+          description: comic hashName
           required: true
           schema:
             type: string

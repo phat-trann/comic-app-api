@@ -71,7 +71,7 @@ router.get('/searchByName', async (req, res) => {
   });
 });
 
-router.get('/:hashName', async (req, res) => {
+router.get('/get/:hashName', async (req, res) => {
   const hashName = req.params.hashName;
   const currentComic = await getComic(hashName);
 
