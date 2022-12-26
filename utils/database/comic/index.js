@@ -107,6 +107,15 @@ const comicToggleLike = async (currentComic, number) => {
   return newLikes;
 };
 
+const comicToggleFollow = async (currentComic, number) => {
+  const newFollows = currentComic._doc.followers + number;
+
+  currentComic.followers = newFollows;
+  await currentComic.save();
+
+  return newFollows;
+};
+
 const voteComic = async (currentComic, number) => {
   const newCount = currentComic._doc.voteCount + 1;
   const newSum = currentComic._doc.voteSum + number;
@@ -138,6 +147,7 @@ module.exports = {
   getFullComicsCount,
   getComicsCount,
   comicToggleLike,
+  comicToggleFollow,
   voteComic,
   comicReceivedView,
   getComicsByListHashName,

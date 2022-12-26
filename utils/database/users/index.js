@@ -94,6 +94,20 @@ const userToggleLikeComic = async (user, hashName, isLike) => {
   }
 };
 
+const userToggleFollowComic = async (user, hashName, isFollow) => {
+  try {
+    if (isFollow) user.follows = [...user._doc.follows, hashName];
+    else user.follows = user._doc.follows.filter((followed) => followed !== hashName);
+
+    await user.save();
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 const userReceivedExp = async (user) => {
   try {
     user.level = {
@@ -133,6 +147,7 @@ module.exports = {
   verifyUser,
   isAdmin,
   userToggleLikeComic,
+  userToggleFollowComic,
   userReceivedExp,
   userVoteComic,
 };

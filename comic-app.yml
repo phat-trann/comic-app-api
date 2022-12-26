@@ -795,8 +795,8 @@ paths:
             schema:
               type: object
               properties:
-                comic:
-                  description: Comic id
+                hashName:
+                  description: Comic hash name
                   type: string
       responses:
         200:
@@ -810,43 +810,14 @@ paths:
                     type: boolean
                     example: false
                   data:
-                    $ref: '#/components/schemas/comic'
-        400:
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-                    example: true
-    delete:
-      security:
-        - normalUser: []
-      tags:
-        - users
-      summary: User click un-follow the comic
-      parameters:
-        - in: query
-          name: comicId
-          description: Comic id
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-                    example: false
-                  data:
-                    $ref: '#/components/schemas/comic'
+                    type: object
+                    properties:
+                      followsCount:
+                        type: number
+                        description: Current followers
+                        example: 1234
+                      isFollow:
+                        type: boolean
         400:
           description: Bad request.
           content:
