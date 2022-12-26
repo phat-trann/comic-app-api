@@ -114,6 +114,19 @@ const userReceivedExp = async (user) => {
   }
 };
 
+const userVoteComic = async (user, hashName) => {
+  try {
+    user.votes = [...user._doc.votes, hashName];
+
+    await user.save();
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 module.exports = {
   getUser,
   createNewUser,
@@ -121,4 +134,5 @@ module.exports = {
   isAdmin,
   userToggleLikeComic,
   userReceivedExp,
+  userVoteComic,
 };
