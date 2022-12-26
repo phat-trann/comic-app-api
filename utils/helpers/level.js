@@ -19,7 +19,6 @@ const TYPE_DEFINE = {
 };
 
 const receivedExp = (current, exp, lastReceived, type) => {
-  console.log(new Date(lastReceived).getTime() + TYPE_DEFINE[type].refresh, Date.now())
   if (new Date(lastReceived).getTime() + TYPE_DEFINE[type].refresh > Date.now())
     return {
       current,
