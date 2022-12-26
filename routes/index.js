@@ -5,11 +5,12 @@ const {
 } = require('../utils/helpers/token');
 const router = express.Router();
 const _CONF = require('../utils/config');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./comic-app.yaml');
 
-/* GET home page. */
-router.get('/', (_req, res) => {
-  res.render('index', { title: 'Express' });
-});
+router.use('/', swaggerUi.serve);
+router.get('/', swaggerUi.setup(swaggerDocument));
 
 router.post('/refreshToken', (req, res) => {
   const { refreshToken } = req.body;

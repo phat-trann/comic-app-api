@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const comicSchema = new mongoose.Schema({
+const chapterSchema = new mongoose.Schema({
   name: String,
   updateDate: {
     type: Date,
@@ -23,4 +23,4 @@ const comicSchema = new mongoose.Schema({
   comments: [String]
 });
 
-module.exports = mongoose.model('chapter', comicSchema);
+module.exports = mongoose.model('chapter', chapterSchema);
