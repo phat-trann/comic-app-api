@@ -20,7 +20,7 @@ router.get('/', validateTokenMiddleware, async (req, res) => {
       ...userProfile,
     });
   }
-  return res.json({
+  return res.status(400).json({
     error: true,
   });
 });

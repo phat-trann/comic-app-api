@@ -9,12 +9,12 @@ const {
   userReceivedExp,
   userSaveHistory,
 } = require('../../utils/database/users');
-const { getUserDateMiddleware } = require('../../utils/helpers/token');
+const { getUserDataMiddleware } = require('../../utils/helpers/token');
 const router = express.Router();
 
 router.get(
   '/get/:hashName/:chapter',
-  getUserDateMiddleware,
+  getUserDataMiddleware,
   async (req, res) => {
     const { hashName, chapter } = req.params;
     const currentUser = await getUser({ userName: req?.userName });
@@ -27,7 +27,7 @@ router.get(
       });
 
     if (currentUser) {
-      await userReceivedExp(currentUser);
+      await userReceivedExp(currentUser, 'READ_NEW_CHAPTER');
       await userSaveHistory(currentUser, hashName, chapter);
     }
 

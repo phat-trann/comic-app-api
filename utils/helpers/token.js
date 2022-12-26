@@ -66,7 +66,7 @@ const removeToken = (res) => {
   res.clearCookie('access-token');
 };
 
-const getUserDateMiddleware = (req, res, next) => {
+const getUserDataMiddleware = (req, res, next) => {
   const accessToken = req.cookies['access-token'];
 
   try {
@@ -88,5 +88,5 @@ module.exports = {
   validateAdminMiddleware,
   generateTokenToCookie,
   removeToken,
-  getUserDateMiddleware,
+  getUserDataMiddleware,
 };
