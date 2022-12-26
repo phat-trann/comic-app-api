@@ -670,6 +670,7 @@ paths:
                 properties:
                   error:
                     type: boolean
+                    example: false
                   data:
                     $ref: '#/components/schemas/user_response'
         400:
