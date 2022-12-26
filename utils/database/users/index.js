@@ -93,10 +93,24 @@ const userToggleLikeComic = async (user, hashName, isLike) => {
   }
 };
 
+const userVoteComic = async (user, hashName) => {
+  try {
+    user.votes = [...user._doc.votes, hashName];
+
+    await user.save();
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 module.exports = {
   getUser,
   createNewUser,
   verifyUser,
   isAdmin,
   userToggleLikeComic,
+  userVoteComic,
 };

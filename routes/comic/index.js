@@ -9,8 +9,13 @@ const {
   getFullComicsCount,
   getComicsByName,
   comicToggleLike,
+  voteComic,
 } = require('../../utils/database/comic');
-const { getUser, userToggleLikeComic } = require('../../utils/database/users');
+const {
+  getUser,
+  userToggleLikeComic,
+  userVoteComic,
+} = require('../../utils/database/users');
 const {
   validateTokenMiddleware,
   validateAdminMiddleware,
@@ -109,6 +114,46 @@ router.post('/like', validateTokenMiddleware, async (req, res) => {
 
   return res.status(400).json({
     error: true,
+  });
+});
+
+router.post('/vote', validateTokenMiddleware, async (req, res) => {
+  const comicHashName = req.body?.hashName;
+  const currentUser = await getUser({ userName: req?.userName });
+  const currentComic = await getComic(comicHashName);
+  const rateNumber = req.body?.vote;
+
+  if (
+    !!currentUser &&
+    !!currentComic &&
+    [1, 2, 3, 4, 5].indexOf(Number(rateNumber)) !== -1
+  ) {
+    const hasVoted = currentUser._doc.votes.indexOf(comicHashName) !== -1;
+
+    if (hasVoted)
+      return res.status(400).json({
+        error: true,
+        code: 1,
+      });
+
+    await userVoteComic(currentUser, comicHashName);
+    const { voteCount, voteSum } = await voteComic(
+      currentComic,
+      Number(rateNumber)
+    );
+
+    return res.json({
+      error: false,
+      data: {
+        voteCount,
+        voteSum,
+      },
+    });
+  }
+
+  return res.status(400).json({
+    error: true,
+    code: 0,
   });
 });
 

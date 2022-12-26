@@ -113,6 +113,20 @@ const comicToggleLike = async (currentComic, number) => {
   return newLikes;
 };
 
+const voteComic = async (currentComic, number) => {
+  const newCount = currentComic._doc.voteCount + 1;
+  const newSum = currentComic._doc.voteSum + number;
+
+  currentComic.voteCount = newCount;
+  currentComic.voteSum = newSum;
+  await currentComic.save();
+
+  return {
+    voteCount: newCount,
+    voteSum: newSum,
+  };
+};
+
 module.exports = {
   createNewComic,
   getComic,
@@ -121,5 +135,6 @@ module.exports = {
   getComicsByName,
   getFullComicsCount,
   getComicsCount,
-  comicToggleLike
+  comicToggleLike,
+  voteComic,
 };
