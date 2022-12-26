@@ -30,8 +30,18 @@ const userSchema = new mongoose.Schema({
   },
   avatar: String,
   level: {
-    type: Number,
-    required: true,
+    current: {
+      type: Number,
+      default: 0,
+    },
+    exp: {
+      type: Number,
+      default: 0,
+    },
+    lastReceived: {
+      type: Date,
+      default: Date.now(),
+    },
   },
   follows: [String],
   likes: [String],
