@@ -57,8 +57,14 @@ const createNewUser = async (data) => {
       admin: false,
       ...data,
       password: md5(data.password),
-      level: 0,
+      level: {
+        current: 0,
+        exp: 0,
+        lastReceived: Date.now(),
+      },
       follows: [],
+      likes: [],
+      votes: [],
     });
     await newUser.save();
 
@@ -94,6 +100,20 @@ const userToggleLikeComic = async (user, hashName, isLike) => {
   }
 };
 
+const userToggleFollowComic = async (user, hashName, isFollow) => {
+  try {
+    if (isFollow) user.follows = [...user._doc.follows, hashName];
+    else user.follows = user._doc.follows.filter((followed) => followed !== hashName);
+
+    await user.save();
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 const userReceivedExp = async (user) => {
   try {
     user.level = {
@@ -112,6 +132,19 @@ const userReceivedExp = async (user) => {
     console.log(e);
     return false;
   }
+};
+
+const userSaveHistory = async (user, hashName, chapter) => {
+  const currentHistory = user._doc.history || [];
+
+  user.history = [
+    `${hashName}/${chapter}`,
+    ...currentHistory.filter(
+      (chapHashName) => chapHashName.split('/')[0] !== hashName
+    ),
+  ];
+
+  await user.save();
 };
 
 const userVoteComic = async (user, hashName) => {
@@ -133,6 +166,8 @@ module.exports = {
   verifyUser,
   isAdmin,
   userToggleLikeComic,
+  userToggleFollowComic,
   userReceivedExp,
   userVoteComic,
+  userSaveHistory,
 };

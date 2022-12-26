@@ -2,7 +2,6 @@ const express = require('express');
 const {
   validateToken,
   generateTokenToCookie,
-  validateTokenMiddleware,
 } = require('../utils/helpers/token');
 const router = express.Router();
 const _CONF = require('../utils/config');
@@ -28,7 +27,7 @@ router.post('/refreshToken', (req, res) => {
       error: false,
     });
   } else {
-    res.json({
+    res.status(400).json({
       error: true,
       message: 'Invalid request',
     });
