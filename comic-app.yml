@@ -835,13 +835,6 @@ paths:
       tags:
         - users
       summary: Show current user history
-      parameters:
-        - in: query
-          name: id
-          description: current user id
-          required: true
-          schema:
-            type: string
       responses:
         200:
           description: Successful operation
@@ -852,10 +845,13 @@ paths:
                 properties:
                   error:
                     type: boolean
+                    example: false
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/comic'
+                      allOf:
+                        - $ref: '#/components/schemas/comic'
+                        - $ref: '#/components/schemas/last_chapter'
   /users/profile:
     get:
       security:
@@ -1410,6 +1406,11 @@ components:
             - type: number
       xml:
         name: comic
+    last_chapter:
+      type: object
+      properties:
+        lastChapter:
+          type: string
     chapter:
       type: object
       properties:

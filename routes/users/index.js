@@ -3,8 +3,17 @@ const router = express.Router();
 const profileRouter = require('./profile');
 const followRouter = require('./follow');
 
-const { verifyUser, createNewUser } = require('../../utils/database/users');
-const { generateTokens, removeToken } = require('../../utils/helpers/token');
+const {
+  verifyUser,
+  createNewUser,
+  getUser,
+} = require('../../utils/database/users');
+const {
+  generateTokens,
+  removeToken,
+  validateTokenMiddleware,
+} = require('../../utils/helpers/token');
+const { getComicsByListHashName } = require('../../utils/database/comic');
 
 router.get('/', (req, res) => {
   res.send('respond with a resource');
@@ -64,6 +73,32 @@ router.post('/signup', async (req, res) => {
       message: error?.message || 'Something wrong!',
     });
   }
+});
+
+router.get('/history', validateTokenMiddleware, async (req, res) => {
+  const currentUser = await getUser({ userName: req?.userName });
+
+  if (!currentUser)
+    return res.status(400).json({
+      error: true,
+    });
+
+  const history = currentUser._doc.history || [];
+  const comicHashNames = history.map((chapter) => chapter.split('/')[0]);
+  const comics = await getComicsByListHashName(comicHashNames);
+  const data = comicHashNames.map((hashName, index) => {
+    const comic = comics.find((el) => el.hashName === hashName);
+
+    return {
+      ...comic._doc,
+      lastChapter: history[index],
+    };
+  });
+
+  return res.json({
+    error: false,
+    data: data || [],
+  });
 });
 
 router.get('/logout', (req, res) => {
