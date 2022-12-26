@@ -67,6 +67,21 @@ const removeToken = (res) => {
   res.end();
 };
 
+const getUserDateMiddleware = (req, res, next) => {
+  const accessToken = req.cookies['access-token'];
+
+  try {
+    const validToken = validateToken(accessToken, _CONF.SECRET);
+    if (validToken) {
+      req.id = validToken.id;
+      req.userName = validToken.userName;
+    }
+    return next();
+  } catch (error) {
+    return res.json({ error: true, message: error.message });
+  }
+};
+
 module.exports = {
   generateTokens,
   validateToken,
@@ -74,4 +89,5 @@ module.exports = {
   validateAdminMiddleware,
   generateTokenToCookie,
   removeToken,
+  getUserDateMiddleware,
 };
