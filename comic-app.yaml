@@ -1027,13 +1027,13 @@ paths:
             schema:
               type: object
               properties:
-                comicId:
-                  description: comic id
+                comicHashName:
+                  description: comic hash name
                   type: string
-                chapterId:
-                  description: chapter id
+                chapterHashName:
+                  description: chapter hash name
                   type: string
-                replyId:
+                parentId:
                   description: Empty if it not is a reply
                   type: string
                 message:
@@ -1074,25 +1074,6 @@ paths:
                 properties:
                   error:
                     type: boolean
-  /comment/newest:
-    get:
-      tags:
-        - comment
-      summary: Get newest comments
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/comment'
   /comment/like:
     post:
       tags:
@@ -1495,6 +1476,8 @@ components:
           type: string
         lastName:
           type: string
+        avatar:
+          type: string
         refreshToken:
           type: string
     user_profile:
@@ -1540,7 +1523,22 @@ components:
       properties:
         _id:
           type: string
-        comicId:
+        author:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            userName:
+              type: string
+            id:
+              type: string
+            avatar:
+              type: string
+        comicHashName:
+          type: string
+        chapterHashName:
           type: string
         message:
           type: string
@@ -1549,6 +1547,8 @@ components:
           description: List replied id
           items:
             type: string
+        isReply:
+          type: boolean
         vote:
           type: object
           properties:

@@ -1,5 +1,4 @@
 const comic = require('../../../models/comic');
-const chapter = require('../../../models/chapter');
 
 const getComic = async (comicHashName) => {
   return await comic.findOne({

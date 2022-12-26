@@ -27,7 +27,7 @@ router.get(
       });
 
     if (currentUser) {
-      await userReceivedExp(currentUser);
+      await userReceivedExp(currentUser, 'READ_NEW_CHAPTER');
       await userSaveHistory(currentUser, hashName, chapter);
     }
 

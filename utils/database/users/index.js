@@ -29,6 +29,7 @@ const verifyUser = async (data) => {
         email: currentUser._doc.email,
         firstName: currentUser._doc.firstName,
         lastName: currentUser._doc.lastName,
+        avatar: currentUser._doc.avatar || '',
       };
     }
 
@@ -74,6 +75,7 @@ const createNewUser = async (data) => {
       email: newUser._doc.email,
       firstName: newUser._doc.firstName,
       lastName: newUser._doc.lastName,
+      avatar: newUser._doc.avatar || '',
     };
   } catch (error) {
     throw error;
@@ -103,7 +105,10 @@ const userToggleLikeComic = async (user, hashName, isLike) => {
 const userToggleFollowComic = async (user, hashName, isFollow) => {
   try {
     if (isFollow) user.follows = [...user._doc.follows, hashName];
-    else user.follows = user._doc.follows.filter((followed) => followed !== hashName);
+    else
+      user.follows = user._doc.follows.filter(
+        (followed) => followed !== hashName
+      );
 
     await user.save();
 
@@ -114,14 +119,14 @@ const userToggleFollowComic = async (user, hashName, isFollow) => {
   }
 };
 
-const userReceivedExp = async (user) => {
+const userReceivedExp = async (user, type) => {
   try {
     user.level = {
       ...receivedExp(
         user._doc.level?.current || 0,
         user._doc.level?.exp || 0,
         user._doc.level?.lastReceived || Date.now(),
-        'READ_NEW_CHAPTER'
+        type
       ),
     };
 
