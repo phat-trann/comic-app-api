@@ -85,12 +85,6 @@ const getComicsByName = async (data) => {
   return await comic.find({ ...search }).limit(limit);
 };
 
-const getChapter = async (comicHashName, chapterId) => {
-  return await chapter.findOne({
-    hashName: [comicHashName, chapterId].join('/'),
-  });
-};
-
 const createNewComic = async (currentData) => {
   try {
     const newComic = new comic(currentData);
@@ -127,14 +121,19 @@ const voteComic = async (currentComic, number) => {
   };
 };
 
+const comicReceivedView = async (currentComic) => {
+  currentComic.views = currentComic._doc.views + 1;
+  await currentComic.save();
+};
+
 module.exports = {
   createNewComic,
   getComic,
-  getChapter,
   getComics,
   getComicsByName,
   getFullComicsCount,
   getComicsCount,
   comicToggleLike,
   voteComic,
+  comicReceivedView,
 };

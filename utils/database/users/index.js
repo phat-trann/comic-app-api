@@ -1,5 +1,6 @@
 const users = require('../../../models/users');
 const md5 = require('md5');
+const { receivedExp } = require('../../helpers/level');
 
 const getUser = async (data) => {
   const currentUser = await users.findOne({
@@ -93,6 +94,26 @@ const userToggleLikeComic = async (user, hashName, isLike) => {
   }
 };
 
+const userReceivedExp = async (user) => {
+  try {
+    user.level = {
+      ...receivedExp(
+        user._doc.level?.current || 0,
+        user._doc.level?.exp || 0,
+        user._doc.level?.lastReceived || Date.now(),
+        'READ_NEW_CHAPTER'
+      ),
+    };
+
+    await user.save();
+
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 const userVoteComic = async (user, hashName) => {
   try {
     user.votes = [...user._doc.votes, hashName];
@@ -112,5 +133,6 @@ module.exports = {
   verifyUser,
   isAdmin,
   userToggleLikeComic,
+  userReceivedExp,
   userVoteComic,
 };

@@ -10,6 +10,7 @@ const indexRouter = require('./routes');
 const usersRouter = require('./routes/users');
 const adminRouter = require('./routes/admin');
 const comicRouter = require('./routes/comic');
+const chaptersRouter = require('./routes/chapters');
 
 const app = express();
 
@@ -26,5 +27,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminRouter);
 app.use('/comic', comicRouter);
+app.use('/chapters', chaptersRouter);
 
 module.exports = app;

@@ -146,10 +146,21 @@ paths:
                 properties:
                   error:
                     type: boolean
+                    example: false
                   data:
                     type: array
                     items:
                       $ref: '#/components/schemas/comic'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
   /comic/searchByName:
     get:
       tags:
@@ -184,6 +195,16 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/comic'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
   /comic/get/{hashName}:
     get:
       tags:
@@ -209,6 +230,16 @@ paths:
                     type: boolean
                   data:
                     $ref: '#/components/schemas/comic'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
   /comic/like:
     post:
       security:
@@ -244,6 +275,16 @@ paths:
                         type: number
                       isLike:
                         type: boolean
+        404:
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
   /comic/vote:
     post:
       security:
@@ -447,12 +488,14 @@ paths:
           required: true
           schema:
             type: string
+            example: spirit-farmer
         - in: path
           name: chap_id
           description: chapter id
           required: true
           schema:
             type: string
+            example: chap-1
       responses:
         200:
           description: Successful operation
@@ -467,6 +510,16 @@ paths:
                     allOf:
                       - $ref: '#/components/schemas/chapter'
                       - $ref: '#/components/schemas/chapter_detail'
+        404:
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
   /chapters/add:
     post:
       security:
@@ -935,6 +988,7 @@ paths:
       tags:
         - comment
       summary: Add comment
+      description: User received a little bit exp for level up when add comment (refresh after a prior of time)
       requestBody:
         required: true
         content:
@@ -1013,6 +1067,7 @@ paths:
       tags:
         - comment
       summary: Like a comment
+      description: User received exp for level up when somebody like their comment
       requestBody:
         required: true
         content:
@@ -1042,6 +1097,7 @@ paths:
       tags:
         - comment
       summary: Remove like a comment
+      description: User who commented lose exp
       parameters:
       - in: query
         name: name
@@ -1073,6 +1129,7 @@ paths:
       tags:
         - comment
       summary: Dislike a comment
+      description: User lose exp when somebody like their comment
       requestBody:
         required: true
         content:
@@ -1102,6 +1159,7 @@ paths:
       tags:
         - comment
       summary: Remove dislike a comment
+      description: User who commented received back exp
       parameters:
       - in: query
         name: name
@@ -1417,11 +1475,22 @@ components:
         lastName:
           type: string
         dob:
-          type: number
+          oneOf:
+            - type: string
+            - type: number
         gender:
           type: boolean
         level:
-          type: number
+          type: object
+          properties:
+            current:
+              type: number
+            exp:
+              type: number
+            lastReceived:
+              oneOf:
+                - type: string
+                - type: number
         follows:
           type: array
           items:
