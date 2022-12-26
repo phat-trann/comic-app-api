@@ -20,6 +20,47 @@ tags:
   - name: report
 
 paths:
+  /refreshToken:
+    post:
+      summary: Get new token with refresh token
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        200:
+          description: Successfully authenticated. <br/>
+            The session ID is returned in a cookie named `access-token`. <br/>You need to include this cookie in subsequent requests.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: access-token=XXX.XX.XXX; Max-Age=600; Path=/; Expires=Fri, 23 Dec 2022 08:26:42 GMT; HttpOnly
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    default: Invalid request
   /comic/count:
     get:
       tags:
@@ -740,36 +781,6 @@ paths:
       responses:
         200:
           description: Logout successful
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-  /users/token:
-    post:
-      tags:
-        - users
-      summary: Get new token with refresh token
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                refreshToken:
-                  type: string
-      responses:
-        200:
-          description: Successfully authenticated. <br/>
-            The session ID is returned in a cookie named `access-token`. <br/>You need to include this cookie in subsequent requests.
-          headers:
-            Set-Cookie:
-              schema:
-                type: string
-                example: access-token=XXX.XX.XXX; Max-Age=600; Path=/; Expires=Fri, 23 Dec 2022 08:26:42 GMT; HttpOnly
           content:
             application/json:
               schema:
