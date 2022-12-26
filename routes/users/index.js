@@ -17,7 +17,7 @@ router.post('/login', async (req, res) => {
       password,
     });
 
-    if (responseData?.error) return res.json(responseData);
+    if (responseData?.error) return res.status(400).json(responseData);
 
     const tokenGenerated = generateTokens(res, responseData);
 
@@ -27,7 +27,7 @@ router.post('/login', async (req, res) => {
       ...tokenGenerated,
     });
   } catch (error) {
-    return res.json({
+    return res.status(400).json({
       error: true,
       message: error?.message || 'Something wrong!',
     });

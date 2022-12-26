@@ -703,8 +703,21 @@ paths:
                 properties:
                   error:
                     type: boolean
+                    example: false
                   data:
                     $ref: '#/components/schemas/user_response'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
   /users/logout:
     delete:
       tags:
