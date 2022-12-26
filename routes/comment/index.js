@@ -1,9 +1,6 @@
 const express = require('express');
-const { createNewComment } = require('../../utils/database/comment');
-const {
-  getUser,
-  userReceivedExp,
-} = require('../../utils/database/users');
+const { createNewComment, getComments } = require('../../utils/database/comment');
+const { getUser, userReceivedExp } = require('../../utils/database/users');
 const {
   getUserDataMiddleware,
   validateTokenMiddleware,
@@ -11,7 +8,24 @@ const {
 const router = express.Router();
 
 router.get('/', getUserDataMiddleware, async (req, res) => {
-  const { hashName, chapter } = req.params;
+  try {
+    const { comicHashName, chapterHashName, current = 0 } = req.params;
+    const comments = await getComments({
+      comicHashName,
+      chapterHashName,
+      current,
+    });
+
+    return res.json({
+      error: false,
+      data: comments,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      error: true,
+      message: error?.message || 'Something wrong!',
+    });
+  }
 });
 
 router.post('/', validateTokenMiddleware, async (req, res) => {

@@ -904,6 +904,16 @@ paths:
                       allOf:
                         - $ref: '#/components/schemas/comic'
                         - $ref: '#/components/schemas/last_chapter'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
   /users/profile:
     get:
       security:
@@ -925,6 +935,16 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/user_profile'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
     post:
       security:
         - normalUser: []
@@ -963,6 +983,16 @@ paths:
                     type: boolean
                   data:
                     $ref: '#/components/schemas/user_profile'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
   /users/delete:
     delete:
       security:
@@ -993,14 +1023,27 @@ paths:
     get:
       tags:
         - comment
-      summary: Get comment by id
+      summary: Get newest comments
       parameters:
         - in: query
-          name: id
-          description: comment id
-          required: true
+          name: comicHashName
+          description: comment hash name
+          required: false
           schema:
             type: string
+        - in: query
+          name: chapterHashName
+          description: chapter hash name
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: current
+          description: current comments
+          required: false
+          schema:
+            type: number
+            default: 0
       responses:
         200:
           description: Successful operation
@@ -1012,7 +1055,29 @@ paths:
                   error:
                     type: boolean
                   data:
-                    $ref: '#/components/schemas/comment'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/comment'
+                        - type: object
+                          properties:
+                            replies:
+                              type: array
+                              description: List replied id
+                              items:
+                                $ref: '#/components/schemas/comment'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
     post:
       security:
         - normalUser: []
@@ -1049,7 +1114,27 @@ paths:
                   error:
                     type: boolean
                   data:
-                    $ref: '#/components/schemas/comment'
+                    allOf:
+                      - $ref: '#/components/schemas/comment'
+                      - type: object
+                        properties:
+                          replies:
+                            type: array
+                            description: List replied id
+                            items:
+                              type: string
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
     delete:
       security:
         - normalUser: []
@@ -1542,11 +1627,6 @@ components:
           type: string
         message:
           type: string
-        replies:
-          type: array
-          description: List replied id
-          items:
-            type: string
         isReply:
           type: boolean
         vote:
