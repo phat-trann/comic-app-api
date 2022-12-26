@@ -46,8 +46,16 @@ router.post('/login', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
   try {
-    const { userName, firstName, lastName, email, password, dob, gender } =
-      req.body;
+    const {
+      userName,
+      firstName,
+      lastName,
+      email,
+      password,
+      dob,
+      gender,
+      avatar,
+    } = req.body;
     const responseData = await createNewUser({
       userName,
       firstName,
@@ -56,6 +64,7 @@ router.post('/signup', async (req, res) => {
       password,
       dob,
       gender,
+      avatar,
     });
 
     if (responseData?.error) return res.json(responseData);
@@ -68,7 +77,7 @@ router.post('/signup', async (req, res) => {
       ...tokenGenerated,
     });
   } catch (error) {
-    return res.json({
+    return res.status(400).json({
       error: true,
       message: error?.message || 'Something wrong!',
     });

@@ -646,7 +646,9 @@ paths:
                 lastName:
                   type: string
                 dob:
-                  type: number
+                  oneOf:
+                    - type: string
+                    - type: number
                 gender:
                   type: boolean
                   description: true if user is a man
@@ -661,7 +663,6 @@ paths:
               schema:
                 type: string
                 example: access-token=XXX.XX.XXX; Max-Age=600; Path=/; Expires=Fri, 23 Dec 2022 08:26:42 GMT; HttpOnly
-
           content:
             application/json:
               schema:
@@ -669,8 +670,21 @@ paths:
                 properties:
                   error:
                     type: boolean
+                    example: false
                   data:
                     $ref: '#/components/schemas/user_response'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
   /users/login:
     post:
       tags:
@@ -913,7 +927,9 @@ paths:
                 lastName:
                   type: string
                 dob:
-                  type: number
+                  oneOf:
+                    - type: string
+                    - type: number
                 gender:
                   type: boolean
                   description: true if user is a man
