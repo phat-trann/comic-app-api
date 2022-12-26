@@ -46,6 +46,7 @@ const userSchema = new mongoose.Schema({
   follows: [String],
   likes: [String],
   votes: [String],
+  history: [String],
   admin: {
     type: Boolean,
     required: true,

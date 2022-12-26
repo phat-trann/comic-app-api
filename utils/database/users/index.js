@@ -114,6 +114,19 @@ const userReceivedExp = async (user) => {
   }
 };
 
+const userSaveHistory = async (user, hashName, chapter) => {
+  const currentHistory = user._doc.history || [];
+
+  user.history = [
+    `${hashName}/${chapter}`,
+    ...currentHistory.filter(
+      (chapHashName) => chapHashName.split('/')[0] !== hashName
+    ),
+  ];
+
+  await user.save();
+};
+
 const userVoteComic = async (user, hashName) => {
   try {
     user.votes = [...user._doc.votes, hashName];
@@ -135,4 +148,5 @@ module.exports = {
   userToggleLikeComic,
   userReceivedExp,
   userVoteComic,
+  userSaveHistory,
 };
