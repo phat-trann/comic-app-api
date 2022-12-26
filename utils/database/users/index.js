@@ -57,8 +57,14 @@ const createNewUser = async (data) => {
       admin: false,
       ...data,
       password: md5(data.password),
-      level: 0,
+      level: {
+        current: 0,
+        exp: 0,
+        lastReceived: Date.now(),
+      },
       follows: [],
+      likes: [],
+      votes: [],
     });
     await newUser.save();
 
