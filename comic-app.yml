@@ -788,6 +788,20 @@ paths:
                 properties:
                   error:
                     type: boolean
+                    example: false
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Something wrong!
   /users/follow:
     get:
       security:
