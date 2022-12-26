@@ -1,5 +1,9 @@
 const express = require('express');
-const { createNewComment, getComments } = require('../../utils/database/comment');
+const {
+  createNewComment,
+  getComments,
+  removeComment,
+} = require('../../utils/database/comment');
 const { getUser, userReceivedExp } = require('../../utils/database/users');
 const {
   getUserDataMiddleware,
@@ -55,6 +59,22 @@ router.post('/', validateTokenMiddleware, async (req, res) => {
     return res.status(400).json({
       error: true,
       message: error?.message || 'Something wrong!',
+    });
+  }
+});
+
+router.delete('/', validateTokenMiddleware, async (req, res) => {
+  try {
+    const currentUser = await getUser({ userName: req?.userName });
+    const { id } = req.params;
+    const result = await removeComment({ id }, currentUser);
+
+    return res.json({
+      error: !result,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      error: true,
     });
   }
 });

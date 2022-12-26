@@ -73,7 +73,37 @@ const getComments = async ({ comicHashName, chapterHashName, current }) => {
   return finalData;
 };
 
+const removeComment = async (query, currentUser) => {
+  const currentComment = await getComment(query);
+
+  if (
+    currentComment &&
+    (currentUser?.admin || currentComment?.author?.id === currentUser?.id)
+  ) {
+    if (!currentComment.isReply) {
+      const repliesData = await comment.find({
+        _id: { $in: currentComment?._doc?.replies },
+      });
+
+      if (repliesData?.length) {
+        await Promise.all(
+          repliesData.forEach(async (reply) => {
+            await reply.remove();
+          })
+        );
+      }
+    }
+
+    await currentComment.remove();
+
+    return true;
+  }
+
+  return false;
+};
+
 module.exports = {
   createNewComment,
+  removeComment,
   getComments,
 };
