@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const profileRouter = require('./profile');
+const followRouter = require('./follow');
 
 const { verifyUser, createNewUser } = require('../../utils/database/users');
 const { generateTokens, removeToken } = require('../../utils/helpers/token');
@@ -74,5 +75,6 @@ router.get('/logout', (req, res) => {
 });
 
 router.use('/profile', profileRouter);
+router.use('/follow', followRouter);
 
 module.exports = router;

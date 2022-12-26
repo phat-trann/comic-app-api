@@ -126,6 +126,10 @@ const comicReceivedView = async (currentComic) => {
   await currentComic.save();
 };
 
+const getComicsByListHashName = async (listHashName) => {
+  return await comic.find({ hashName: { $in: listHashName } });
+};
+
 module.exports = {
   createNewComic,
   getComic,
@@ -136,4 +140,5 @@ module.exports = {
   comicToggleLike,
   voteComic,
   comicReceivedView,
+  getComicsByListHashName,
 };

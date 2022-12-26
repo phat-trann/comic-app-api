@@ -757,13 +757,6 @@ paths:
       tags:
         - users
       summary: Show all comics which current user followed
-      parameters:
-        - in: query
-          name: id
-          description: current user id
-          required: true
-          schema:
-            type: string
       responses:
         200:
           description: Successful operation
@@ -774,10 +767,21 @@ paths:
                 properties:
                   error:
                     type: boolean
+                    example: false
                   data:
                     type: array
                     items:
                       $ref: '#/components/schemas/comic'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
     post:
       security:
         - normalUser: []
@@ -794,9 +798,6 @@ paths:
                 comic:
                   description: Comic id
                   type: string
-                user:
-                  description: User id
-                  type: string
       responses:
         200:
           description: Successful operation
@@ -807,8 +808,19 @@ paths:
                 properties:
                   error:
                     type: boolean
+                    example: false
                   data:
                     $ref: '#/components/schemas/comic'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
     delete:
       security:
         - normalUser: []
@@ -822,12 +834,6 @@ paths:
           required: true
           schema:
             type: string
-        - in: query
-          name: userId
-          description: User id
-          required: true
-          schema:
-            type: string
       responses:
         200:
           description: Successful operation
@@ -838,6 +844,19 @@ paths:
                 properties:
                   error:
                     type: boolean
+                    example: false
+                  data:
+                    $ref: '#/components/schemas/comic'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
   /users/history:
     get:
       security:
