@@ -1,4 +1,5 @@
 const users = require('../../../models/users');
+const level = require('../../config/level');
 
 const getUser = async (data) => await users.findOne({ ...data });
 
@@ -15,7 +16,11 @@ const getUserProfile = async (data) => {
       dob: currentUser._doc.dob,
       gender: currentUser._doc.gender,
       avatar: currentUser._doc.avatar,
-      level: currentUser._doc.level,
+      level: {
+        current: currentUser._doc.level.current,
+        next:
+          currentUser._doc.level.exp / level[currentUser._doc.level.current],
+      },
     };
   }
 
@@ -44,7 +49,11 @@ const updateUserProfile = async (userData) => {
         dob: currentUser._doc.dob,
         gender: currentUser._doc.gender,
         avatar: currentUser._doc.avatar,
-        level: currentUser._doc.level,
+        level: {
+          current: currentUser._doc.level.current,
+          next:
+            currentUser._doc.level.exp / level[currentUser._doc.level.current],
+        },
       };
     }
   } catch (error) {
