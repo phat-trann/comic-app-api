@@ -65,12 +65,19 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-router.get('/logout', (req, res) => {
-  removeToken(res);
+router.delete('/logout', (req, res) => {
+  try {
+    removeToken(res);
 
-  return {
-    error: false,
-  };
+    return res.json({
+      error: false,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      error: true,
+      message: error?.message || 'Something wrong!',
+    });
+  }
 });
 
 router.use('/profile', profileRouter);

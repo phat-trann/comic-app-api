@@ -64,7 +64,6 @@ const validateAdminMiddleware = async (req, res, next) => {
 
 const removeToken = (res) => {
   res.clearCookie('access-token');
-  res.end();
 };
 
 const getUserDateMiddleware = (req, res, next) => {
