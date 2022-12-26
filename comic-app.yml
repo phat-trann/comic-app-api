@@ -897,13 +897,6 @@ paths:
       tags:
         - users
       summary: Show current user profile
-      parameters:
-        - in: query
-          name: id
-          description: current user id
-          required: true
-          schema:
-            type: string
       responses:
         200:
           description: Successful operation
@@ -931,8 +924,6 @@ paths:
             schema:
               type: object
               properties:
-                password:
-                  type: string
                 firstName:
                   type: string
                 lastName:
@@ -1516,12 +1507,8 @@ components:
           properties:
             current:
               type: number
-            exp:
+            next:
               type: number
-            lastReceived:
-              oneOf:
-                - type: string
-                - type: number
         follows:
           type: array
           items:

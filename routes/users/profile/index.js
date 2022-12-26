@@ -25,14 +25,8 @@ router.get('/', validateTokenMiddleware, async (req, res) => {
   });
 });
 
-router.post('/edit', validateTokenMiddleware, async (req, res) => {
+router.post('/', validateTokenMiddleware, async (req, res) => {
   const { id, userName } = req;
-
-  if (!id || !userName)
-    return res.json({
-      error: true,
-      message: 'User not Authenticated',
-    });
   const { firstName, lastName, dob, gender, avatar } = req.body;
   const userProfile = await updateUserProfile({
     id,
@@ -50,9 +44,8 @@ router.post('/edit', validateTokenMiddleware, async (req, res) => {
       ...userProfile,
     });
 
-  return res.json({
+  return res.status(400).json({
     error: true,
-    message: 'Something wrongs!',
   });
 });
 
