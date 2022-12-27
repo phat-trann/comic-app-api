@@ -3,6 +3,7 @@ const {
   createNewComment,
   getComments,
   removeComment,
+  actionComment,
 } = require('../../utils/database/comment');
 const { getUser, userReceivedExp } = require('../../utils/database/users');
 const {
@@ -75,6 +76,26 @@ router.delete('/', validateTokenMiddleware, async (req, res) => {
   } catch (error) {
     return res.status(400).json({
       error: true,
+    });
+  }
+});
+
+router.get('/:action/:id', validateTokenMiddleware, async (req, res) => {
+  try {
+    const currentUser = await getUser({ userName: req?.userName });
+    const { action, id } = req.params;
+    const data = await actionComment(action, id, currentUser);
+
+    if (!data) throw new Error('Something wrong');
+
+    return res.json({
+      error: false,
+      data: data,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      error: true,
+      message: error.message
     });
   }
 });
