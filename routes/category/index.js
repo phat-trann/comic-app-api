@@ -1,35 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { createNewCategory } = require('../../utils/database/category');
+const {
+  createNewCategory,
+  getCategory,
+} = require('../../utils/database/category');
+const { getComic } = require('../../utils/database/comic');
 const {
   validateAdminMiddleware,
   validateTokenMiddleware,
 } = require('../../utils/helpers/token');
-
-router.post('/login', async (req, res) => {
-  try {
-    const { userName, password } = req.body;
-    const responseData = await verifyUser({
-      userName,
-      password,
-    });
-
-    if (responseData?.error) return res.status(400).json(responseData);
-
-    const tokenGenerated = generateTokens(res, responseData);
-
-    return res.json({
-      error: false,
-      ...responseData,
-      ...tokenGenerated,
-    });
-  } catch (error) {
-    return res.status(400).json({
-      error: true,
-      message: error?.message || 'Something wrong!',
-    });
-  }
-});
 
 router.post(
   '/add',
@@ -50,6 +29,32 @@ router.post(
       return res.status(400).json({
         error: true,
         message: error?.message,
+      });
+    }
+  }
+);
+
+router.post(
+  '/assign',
+  validateTokenMiddleware,
+  validateAdminMiddleware,
+  async (req, res) => {
+    try {
+      const { comicHashName, categoryKey } = req.body;
+      const currentComic = await getComic(comicHashName);
+      const currentCategory = await getCategory({ id: categoryKey });
+
+      /* TODO: Admin page */
+      // const data = await assignCategory()
+
+      return res.json({
+        error: false,
+        data: currentComic,
+      });
+    } catch (error) {
+      return res.status(400).json({
+        error: true,
+        message: error?.message || 'Something wrong!',
       });
     }
   }

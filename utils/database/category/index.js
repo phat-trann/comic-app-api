@@ -34,4 +34,4 @@ const createNewCategory = async ({ name }) => {
   }
 };
 
-module.exports = { getComicsInCategoryCount, createNewCategory };
+module.exports = { getComicsInCategoryCount, createNewCategory, getCategory };
