@@ -12,6 +12,7 @@ const adminRouter = require('./routes/admin');
 const comicRouter = require('./routes/comic');
 const chaptersRouter = require('./routes/chapters');
 const commentRouter = require('./routes/comment');
+const categoryRouter = require('./routes/category');
 
 const app = express();
 
@@ -30,5 +31,6 @@ app.use('/admin', adminRouter);
 app.use('/comic', comicRouter);
 app.use('/chapters', chaptersRouter);
 app.use('/comment', commentRouter);
+app.use('/category', categoryRouter);
 
 module.exports = app;
