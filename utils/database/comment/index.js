@@ -1,4 +1,5 @@
 const comment = require('../../../models/comment');
+const { getUser, userReceivedExp } = require('../users');
 
 const getComment = async (data) => {
   const currentComment = await comment.findOne({
@@ -102,8 +103,67 @@ const removeComment = async (query, currentUser) => {
   return false;
 };
 
+const actionComment = async (action, id, user) => {
+  if (!action || !id) return null;
+  const currentComment = await getComment({ id });
+  const userId = user._doc._id;
+
+  if (!currentComment || !userId || !['like', 'dislike'].includes(action))
+    return null;
+
+  const currentData = currentComment._doc.vote?.[action] || [];
+  const authorComment = await getUser({ id: currentComment._doc.author.id });
+  let current = currentData.length;
+  let is = false;
+
+  if (currentData.includes(userId)) {
+    currentComment.vote[action] = currentData.filter((el) => {
+      return el !== String(userId);
+    });
+    current -= 1;
+
+    await userReceivedExp(
+      authorComment,
+      action === 'like' ? 'OWN_COMMENT_S_DISLIKED' : 'OWN_COMMENT_S_LIKED'
+    );
+  } else {
+    currentComment.vote[action] = [...currentData, userId];
+    current += 1;
+    is = true;
+
+    await userReceivedExp(
+      authorComment,
+      action === 'dislike' ? 'OWN_COMMENT_S_DISLIKED' : 'OWN_COMMENT_S_LIKED'
+    );
+
+    const otherAction = ['like', 'dislike'].find((el) => el !== action);
+    const currentOtherData = currentComment._doc.vote?.[otherAction] || [];
+
+    if (currentOtherData.includes(userId)) {
+      currentComment.vote[otherAction] = currentOtherData.filter((el) => {
+        return el !== String(userId);
+      });
+
+      await userReceivedExp(
+        authorComment,
+        otherAction === 'like'
+          ? 'OWN_COMMENT_S_DISLIKED'
+          : 'OWN_COMMENT_S_LIKED'
+      );
+    }
+  }
+  await currentComment.save();
+  await authorComment.save();
+
+  return {
+    current,
+    is,
+  };
+};
+
 module.exports = {
   createNewComment,
   removeComment,
   getComments,
+  actionComment,
 };

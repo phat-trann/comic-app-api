@@ -1159,116 +1159,25 @@ paths:
                 properties:
                   error:
                     type: boolean
-  /comment/like:
-    post:
+  /comment/{action}/{id}:
+    get:
       tags:
         - comment
-      summary: Like a comment
-      description: User received exp for level up when somebody like their comment
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                commentId:
-                  type: string
-                userId:
-                  type: string
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/comment'
-    delete:
-      tags:
-        - comment
-      summary: Remove like a comment
-      description: User who commented lose exp
+      summary: Like or dislike a comment
       parameters:
-      - in: query
-        name: name
-        description: description
-        required: false
-        schema:
-          type: object
-          properties:
-            commentId:
-              type: string
-            userId:
-              type: string
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/comment'
-  /comment/dislike:
-    post:
-      tags:
-        - comment
-      summary: Dislike a comment
-      description: User lose exp when somebody like their comment
-      requestBody:
+      - in: path
+        name: action
+        description: like or dislike
+        example: like
         required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                commentId:
-                  type: string
-                userId:
-                  type: string
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/comment'
-    delete:
-      tags:
-        - comment
-      summary: Remove dislike a comment
-      description: User who commented received back exp
-      parameters:
-      - in: query
-        name: name
-        description: description
-        required: false
         schema:
-          type: object
-          properties:
-            commentId:
-              type: string
-            userId:
-              type: string
+          type: string
+      - in: path
+        name: id
+        description: comment id
+        required: true
+        schema:
+          type: string
       responses:
         200:
           description: Successful operation
@@ -1280,10 +1189,22 @@ paths:
                   error:
                     type: boolean
                   data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/comment'
-
+                    type: object
+                    properties:
+                      current:
+                        type: number
+                      is:
+                        type: boolean
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
   /category/add:
     post:
       security:
