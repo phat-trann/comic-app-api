@@ -1231,8 +1231,22 @@ paths:
                 properties:
                   error:
                     type: boolean
+                    example: false
                   data:
                     $ref: '#/components/schemas/category'
+        400:
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Something wrong!
   /category/assign:
     post:
       security:

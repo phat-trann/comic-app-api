@@ -85,6 +85,8 @@ const createNewUser = async (data) => {
 const isAdmin = async (data) => {
   const currentUser = await getUser(data);
 
+  console.log(currentUser)
+
   return currentUser?._doc?.admin;
 };
 

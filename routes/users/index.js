@@ -15,10 +15,6 @@ const {
 } = require('../../utils/helpers/token');
 const { getComicsByListHashName } = require('../../utils/database/comic');
 
-router.get('/', (req, res) => {
-  res.send('respond with a resource');
-});
-
 router.post('/login', async (req, res) => {
   try {
     const { userName, password } = req.body;
@@ -33,8 +29,10 @@ router.post('/login', async (req, res) => {
 
     return res.json({
       error: false,
-      ...responseData,
-      ...tokenGenerated,
+      data: {
+        ...responseData,
+        ...tokenGenerated,
+      },
     });
   } catch (error) {
     return res.status(400).json({
@@ -73,8 +71,10 @@ router.post('/signup', async (req, res) => {
 
     return res.json({
       error: false,
-      ...responseData,
-      ...tokenGenerated,
+      data: {
+        ...responseData,
+        ...tokenGenerated,
+      },
     });
   } catch (error) {
     return res.status(400).json({
