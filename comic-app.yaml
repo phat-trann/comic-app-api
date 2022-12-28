@@ -8,7 +8,7 @@ info:
 servers:
   - url: http://localhost:3000/api
     description: Sandbox
-  - url: https://comic-app-api.vercel.app/api
+  - url: https://comic-app-api-production.up.railway.app/api
     description: Expected
 
 tags:
