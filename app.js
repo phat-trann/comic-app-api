@@ -5,14 +5,10 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 require('dotenv').config();
 const { connectDB } = require('./utils/database/connect');
-
 const indexRouter = require('./routes');
-const usersRouter = require('./routes/users');
-const adminRouter = require('./routes/admin');
-const comicRouter = require('./routes/comic');
-const chaptersRouter = require('./routes/chapters');
-const commentRouter = require('./routes/comment');
-const categoryRouter = require('./routes/category');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./comic-app.yaml');
 
 const app = express();
 
@@ -22,15 +18,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/', swaggerUi.serve);
+app.get('/', swaggerUi.setup(swaggerDocument));
 
 connectDB();
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/admin', adminRouter);
-app.use('/comic', comicRouter);
-app.use('/chapters', chaptersRouter);
-app.use('/comment', commentRouter);
-app.use('/category', categoryRouter);
+app.use('/api', indexRouter);
 
 module.exports = app;
