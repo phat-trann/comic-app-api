@@ -5,12 +5,12 @@ const {
 } = require('../utils/helpers/token');
 const router = express.Router();
 const _CONF = require('../utils/config');
-const swaggerUi = require('swagger-ui-express');
-const YAML = require('yamljs');
-const swaggerDocument = YAML.load('./comic-app.yaml');
-
-router.use('/', swaggerUi.serve);
-router.get('/', swaggerUi.setup(swaggerDocument));
+const usersRouter = require('./users');
+const adminRouter = require('./admin');
+const comicRouter = require('./comic');
+const chaptersRouter = require('./chapters');
+const commentRouter = require('./comment');
+const categoryRouter = require('./category');
 
 router.post('/refreshToken', (req, res) => {
   const { refreshToken } = req.body;
@@ -34,5 +34,12 @@ router.post('/refreshToken', (req, res) => {
     });
   }
 });
+
+router.use('/users', usersRouter);
+router.use('/admin', adminRouter);
+router.use('/comic', comicRouter);
+router.use('/chapters', chaptersRouter);
+router.use('/comment', commentRouter);
+router.use('/category', categoryRouter);
 
 module.exports = router;

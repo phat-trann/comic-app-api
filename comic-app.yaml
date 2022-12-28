@@ -6,9 +6,9 @@ info:
   contact:
     email: phat.tran.fit@gmail.com
 servers:
-  - url: http://localhost:3000
+  - url: http://localhost:3000/api
     description: Sandbox
-  - url: https://pm.comicapp.com/api/v1
+  - url: https://comic-app-api.vercel.app/api
     description: Expected
 
 tags:
