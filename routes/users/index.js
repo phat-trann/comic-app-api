@@ -7,6 +7,7 @@ const {
   verifyUser,
   createNewUser,
   getUser,
+  deleteUser
 } = require('../../utils/database/users');
 const {
   generateTokens,
@@ -121,6 +122,21 @@ router.delete('/logout', (req, res) => {
     return res.status(400).json({
       error: true,
       message: error?.message || 'Something wrong!',
+    });
+  }
+});
+
+router.delete('/delete/:id', validateTokenMiddleware, async (req, res) => {
+  try {
+    const deletedUser = await deleteUser({ _id: req.params.id });
+
+    res.json({
+      ...deletedUser
+    });
+  } catch (e) {
+    res.json({
+      error: true,
+      message: e?.message
     });
   }
 });
