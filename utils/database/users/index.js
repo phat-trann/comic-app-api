@@ -82,6 +82,19 @@ const createNewUser = async (data) => {
   }
 };
 
+const deleteUser = async (data) => {
+  const deleted = await users.deleteOne({ ...data });
+
+  if (deleted?.deletedCount > 0) {
+    return {
+      error: false,
+      message: 'Already deleted user.'
+    };
+  }
+
+  throw new Error('Invalid information.');
+};
+
 const isAdmin = async (data) => {
   const currentUser = await getUser(data);
 
@@ -170,6 +183,7 @@ const userVoteComic = async (user, hashName) => {
 module.exports = {
   getUser,
   createNewUser,
+  deleteUser,
   verifyUser,
   isAdmin,
   userToggleLikeComic,
