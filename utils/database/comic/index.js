@@ -66,6 +66,7 @@ const getComics = async (data) => {
     .find({ ...searchData })
     .skip(skip)
     .limit(limit)
+    .select('-chapters')
     .sort([[sort, sortType]]);
 };
 

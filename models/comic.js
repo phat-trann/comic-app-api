@@ -51,6 +51,19 @@ const comicSchema = new mongoose.Schema({
       hashName: String,
     },
   ],
+  lastChapter: {
+    name: String,
+    updateDate: {
+      type: Date,
+      default: Date.now(),
+    },
+    views: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+    hashName: String,
+  },
   likes: {
     type: Number,
     default: 0,
